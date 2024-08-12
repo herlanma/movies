@@ -5,43 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); /* Cool 90's font */
+
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             font-family: Arial, sans-serif;
-            background-color: #5a2a8f; /* Lighter purple background */
+            background-color: #7A4ABF; /* Lighter purple background */
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         .container {
             text-align: center;
             position: relative;
             width: 80%;
         }
-        .city {
-            font-size: 48px;
+
+        .title {
+            font-family: 'Press Start 2P', cursive; /* 90's style font */
+            font-size: 36px;
             margin-bottom: 20px;
+            color: #00FF00; /* Neon green text */
+            text-shadow: 2px 2px #FF00FF; /* Magenta shadow */
         }
+
+        .city {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
         .weather-icon {
             width: 150px;
             height: 150px;
             margin-bottom: 20px;
         }
+
         .temp {
-            font-size: 72px;
-            margin-bottom: 20px;
+            font-size: 48px;
+            margin-bottom: 10px;
         }
+
+        .description {
+            font-size: 24px;
+            margin-bottom: 40px;
+        }
+
         .forecast-section {
             margin-top: 40px;
         }
+
         .logo {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             width: 150px;
             height: auto;
         }
@@ -50,15 +71,22 @@
 <body>
     <div class="container">
         <img src="logo.png" alt="Company Logo" class="logo"> <!-- Company logo -->
+        
+        <div class="title">Ali's Weather Forecast</div> <!-- 90's style title -->
+
         <div class="city" id="city">Loading...</div>
+        
+        <div class="description" id="today-description">-</div>
         <img class="weather-icon" id="weather-icon" src="" alt="Weather Icon" style="display:none;">
         <div class="temp" id="temp">-</div>
         
         <div class="forecast-section">
+            <div class="description" id="tomorrow-description">-</div>
             <img class="weather-icon" id="weather-icon-tomorrow" src="" alt="Weather Icon" style="display:none;">
             <div class="temp" id="temp-tomorrow">-</div>
         </div>
     </div>
+
     <script>
         const apiKey = '1877cf6702f978805f7e89f643fb2e25'; // Replace with your OpenWeatherMap API key
         const city = 'Bangkok'; // Change to your city
@@ -74,6 +102,11 @@
             "Fog": "fog.png",
         };
 
+        function formatDate(date) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            return new Intl.DateTimeFormat('en-US', options).format(date);
+        }
+
         async function fetchWeather() {
             const urlToday = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
             const urlTomorrow = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&cnt=8&appid=${apiKey}`;
@@ -84,8 +117,13 @@
             const dataToday = await responseToday.json();
             const dataTomorrow = await responseTomorrow.json();
 
+            const todayDate = new Date();
+            const tomorrowDate = new Date();
+            tomorrowDate.setDate(todayDate.getDate() + 1);
+
             document.getElementById('city').innerText = `${dataToday.name}`;
             document.getElementById('temp').innerText = `${Math.round(dataToday.main.temp)}°C`;
+            document.getElementById('today-description').innerText = `Today, ${formatDate(todayDate)}`;
 
             // Show weather icon for today
             const weatherToday = dataToday.weather[0].main;
@@ -99,6 +137,7 @@
             // Show weather icon for tomorrow
             const tomorrowWeather = dataTomorrow.list[7].weather[0].main;
             document.getElementById('temp-tomorrow').innerText = `${Math.round(dataTomorrow.list[7].main.temp)}°C`;
+            document.getElementById('tomorrow-description').innerText = `Tomorrow, ${formatDate(tomorrowDate)}`;
             if (icons[tomorrowWeather]) {
                 const iconTomorrow = icons[tomorrowWeather];
                 const imgTomorrow = document.getElementById('weather-icon-tomorrow');
