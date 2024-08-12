@@ -19,73 +19,98 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
         }
 
         .icons-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 2%;
+            flex-wrap: wrap;
+            width: 100%;
         }
 
         .icon-small {
-            width: 50px;
-            height: 50px;
-            margin: 0 10px;
+            width: 5vw;
+            height: 5vw;
+            margin: 0 1vw;
         }
 
         .container {
             text-align: center;
             position: relative;
             width: 80%;
+            max-width: 1200px;
         }
 
         .city {
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 3vw;
+            margin-bottom: 1%;
         }
 
         .weather-icon {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 20px;
+            width: 10vw;
+            height: 10vw;
+            margin-bottom: 2%;
         }
 
         .temp {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 6vw;
+            margin-bottom: 1%;
         }
 
         .description {
-            font-size: 24px;
-            margin-bottom: 40px;
+            font-size: 3vw;
+            margin-bottom: 4%;
         }
 
         .forecast-section {
-            margin-top: 40px;
+            margin-top: 4%;
         }
 
         .logo {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 150px;
+            top: 2%;
+            right: 2%;
+            width: 10vw;
             height: auto;
         }
 
         .title {
             font-family: 'Press Start 2P', cursive; /* 90's style font */
-            font-size: 36px;
-            margin-bottom: 20px;
+            font-size: 3vw;
+            margin-bottom: 2%;
             color: #00FF00; /* Neon green text */
             text-shadow: 2px 2px #FF00FF; /* Magenta shadow */
         }
 
         .bottom-title {
             text-align: center;
-            padding: 20px;
+            padding: 2%;
             width: 100%;
             background-color: #3E1E6D; /* Darker purple for the footer area */
+        }
+
+        /* Ensure scaling for large screens */
+        @media only screen and (min-width: 1920px) {
+            .icon-small {
+                width: 50px;
+                height: 50px;
+            }
+
+            .weather-icon {
+                width: 150px;
+                height: 150px;
+            }
+
+            .city, .description, .temp {
+                font-size: calc(12px + 2vw);
+            }
+
+            .title {
+                font-size: 48px;
+            }
         }
     </style>
 </head>
@@ -94,6 +119,11 @@
         <img src="sun.png" alt="Clear" class="icon-small">
         <img src="clouds.png" alt="Clouds" class="icon-small">
         <img src="rain.png" alt="Rain" class="icon-small">
+        <img src="snow.png" alt="Snow" class="icon-small">
+        <img src="thunderstorm.png" alt="Thunderstorm" class="icon-small">
+        <img src="drizzle.png" alt="Drizzle" class="icon-small">
+        <img src="mist.png" alt="Mist" class="icon-small">
+        <img src="fog.png" alt="Fog" class="icon-small">
     </div>
 
     <div class="container">
