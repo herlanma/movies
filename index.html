@@ -16,22 +16,28 @@
             background-color: #7A4ABF; /* Lighter purple background */
             color: white;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .icons-row {
+            display: flex;
             justify-content: center;
             align-items: center;
+            margin-top: 20px;
+        }
+
+        .icon-small {
+            width: 50px;
+            height: 50px;
+            margin: 0 10px;
         }
 
         .container {
             text-align: center;
             position: relative;
             width: 80%;
-        }
-
-        .title {
-            font-family: 'Press Start 2P', cursive; /* 90's style font */
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: #00FF00; /* Neon green text */
-            text-shadow: 2px 2px #FF00FF; /* Magenta shadow */
         }
 
         .city {
@@ -66,16 +72,38 @@
             width: 150px;
             height: auto;
         }
+
+        .title {
+            font-family: 'Press Start 2P', cursive; /* 90's style font */
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #00FF00; /* Neon green text */
+            text-shadow: 2px 2px #FF00FF; /* Magenta shadow */
+        }
+
+        .bottom-title {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            background-color: #3E1E6D; /* Darker purple for the footer area */
+        }
     </style>
 </head>
 <body>
+    <div class="icons-row">
+        <img src="sun.png" alt="Clear" class="icon-small">
+        <img src="clouds.png" alt="Clouds" class="icon-small">
+        <img src="rain.png" alt="Rain" class="icon-small">
+        <img src="snow.png" alt="Snow" class="icon-small">
+        <img src="thunderstorm.png" alt="Thunderstorm" class="icon-small">
+        <img src="drizzle.png" alt="Drizzle" class="icon-small">
+        <img src="mist.png" alt="Mist" class="icon-small">
+        <img src="fog.png" alt="Fog" class="icon-small">
+    </div>
+
     <div class="container">
         <img src="logo.png" alt="Company Logo" class="logo"> <!-- Company logo -->
-        
-        <div class="title">Ali's Weather Forecast</div> <!-- 90's style title -->
-
         <div class="city" id="city">Loading...</div>
-        
         <div class="description" id="today-description">-</div>
         <img class="weather-icon" id="weather-icon" src="" alt="Weather Icon" style="display:none;">
         <div class="temp" id="temp">-</div>
@@ -85,6 +113,10 @@
             <img class="weather-icon" id="weather-icon-tomorrow" src="" alt="Weather Icon" style="display:none;">
             <div class="temp" id="temp-tomorrow">-</div>
         </div>
+    </div>
+
+    <div class="bottom-title">
+        <div class="title">Ali's Weather Forecast</div> <!-- 90's style title at the bottom -->
     </div>
 
     <script>
