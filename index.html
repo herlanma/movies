@@ -174,11 +174,11 @@
             tomorrowDate.setDate(todayDate.getDate() + 1);
 
             document.getElementById('city').innerText = `${dataToday.name}`;
-            document.getElementById('temp').innerText = `${Math.round(dataToday.max.temp)}°C`;
+            document.getElementById('temp').innerText = `${Math.round(dataToday.main.temp)}°C`;
             document.getElementById('today-description').innerText = `Today, ${formatDate(todayDate)}`;
 
             // Show weather icon for today
-            const weatherToday = dataToday.weather[0].max;
+            const weatherToday = dataToday.weather[0].main;
             if (icons[weatherToday]) {
                 const iconToday = icons[weatherToday];
                 const imgToday = document.getElementById('weather-icon');
@@ -187,8 +187,8 @@
             }
 
             // Show weather icon for tomorrow
-            const tomorrowWeather = dataTomorrow.list[7].weather[0].max;
-            document.getElementById('temp-tomorrow').innerText = `${Math.round(dataTomorrow.list[7].max.temp)}°C`;
+            const tomorrowWeather = dataTomorrow.list[7].weather[0].main;
+            document.getElementById('temp-tomorrow').innerText = `${Math.round(dataTomorrow.list[7].main.temp)}°C`;
             document.getElementById('tomorrow-description').innerText = `Tomorrow, ${formatDate(tomorrowDate)}`;
             if (icons[tomorrowWeather]) {
                 const iconTomorrow = icons[tomorrowWeather];
