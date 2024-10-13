@@ -184,11 +184,11 @@
         if (currentContent === 'movies') {
           await fetchMovies();
           currentContent = 'books';
-          await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+          await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 5 seconds
         } else {
           await fetchTopSellersBooks();
           currentContent = 'movies';
-          await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+          await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 5 seconds
         }
       }
     }
