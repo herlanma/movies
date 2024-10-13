@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aktuelle Filme im Kino</title>
+  <title>Current Movies & Top Sellers Books</title>
   <style>
     body {
       background-color: #6a0dad; /* Purple background */
@@ -17,99 +17,184 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      transition: opacity 1s ease; /* Fade transition for opacity */
     }
 
     h1 {
       margin-bottom: 20px;
     }
 
-    .movies {
+    .items {
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
       justify-content: center;
+      margin-bottom: 20px; /* Space for the logo */
     }
 
-    .movie {
+    .item {
       background-color: #4b0082;
       padding: 10px;
       border-radius: 10px;
       max-width: 200px;
     }
 
-    .movie img {
+    .item img {
       width: 100%;
       border-radius: 10px;
     }
 
-    .movie-title {
+    .item-title {
       margin-top: 10px;
       font-size: 18px;
       font-weight: bold;
     }
 
-    .movie-description {
+    .item-description {
       margin-top: 5px;
       font-size: 14px;
       color: #ddd;
     }
 
-    /* Footer for company logo */
-    footer {
-      margin-top: 40px;
+    .item-rating {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      color: yellow;
     }
 
-    footer img {
-      width: 150px;
-      height: auto;
+    .error {
+      color: red;
+    }
+
+    .logo {
       margin-top: 20px;
+    }
+
+    .logo img {
+      width: 150px; /* Adjust width as needed */
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Aktuelle Filme im Kino</h1>
-  <div class="movies" id="movies"></div>
+  <h1 id="main-title">Current Movies & Top Sellers Books</h1>
+  <div class="items" id="items"></div>
 
-  <!-- Footer for company logo -->
-  <footer>
-    <img src="logo.png" alt="Company Logo"> <!-- Replace logo.png with the actual path of your logo image -->
-  </footer>
+  <div class="logo">
+    <img src="your-logo.png" alt="Company Logo"> <!-- Update the logo image path -->
+  </div>
 
   <script>
-    const apiKey = '93503d8479633660d783c44cf1d9716c';
-    const apiUrl = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=de-DE&page=1`;
+    const movieApiKey = '93503d8479633660d783c44cf1d9716c'; // TMDB API key
+    const bookApiKey = 'JRMMtwS843CxPW8TxFadwW1EFmorThWx'; // NY Times API key
 
+    let currentContent = 'movies'; // Track the current content type
+
+    // Function to fetch and display movies
     async function fetchMovies() {
+      const apiUrl = `https://api.themoviedb.org/3/movie/now_playing?api_key=${movieApiKey}&language=de-DE`;
+      
       try {
         const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        displayMovies(data.results.slice(0, 4)); // Get only the first 4 movies
+        
+        if (!data.results || data.results.length === 0) {
+          displayError('No movies available. Please try again.');
+          return;
+        }
+
+        displayItems(data.results.slice(0, 4), 'movie'); // Get only the first 4 movies
+        document.getElementById('main-title').innerText = 'Currently in Theaters';
       } catch (error) {
         console.error('Error fetching movies:', error);
+        displayError('Error fetching movies. Please try again later.');
       }
     }
 
-    function displayMovies(movies) {
-      const moviesContainer = document.getElementById('movies');
-      movies.forEach(movie => {
-        const movieDiv = document.createElement('div');
-        movieDiv.classList.add('movie');
+    // Function to fetch and display top sellers books
+    async function fetchTopSellersBooks() {
+      const apiUrl = `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${bookApiKey}`;
 
-        const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : 'placeholder.jpg';
-        const movieTitle = movie.title;
-        const movieDescription = movie.overview.length > 120 ? movie.overview.slice(0, 120) + '...' : movie.overview;
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        if (!data.results || data.results.books.length === 0) {
+          displayError('No books available. Please try again.');
+          return;
+        }
 
-        movieDiv.innerHTML = `
-          <img src="${posterPath}" alt="${movieTitle}">
-          <div class="movie-title">${movieTitle}</div>
-          <div class="movie-description">${movieDescription}</div>
+        displayItems(data.results.books.slice(0, 4), 'book'); // Get only the first 4 books
+        document.getElementById('main-title').innerText = 'NY Times Top Sellers';
+      } catch (error) {
+        console.error('Error fetching books:', error);
+        displayError('Error fetching books. Please try again later.');
+      }
+    }
+
+    // Function to display items (books or movies)
+    function displayItems(items, type) {
+      const itemsContainer = document.getElementById('items');
+      itemsContainer.innerHTML = ''; // Clear previous results
+      items.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('item');
+
+        let itemTitle, itemDescription, itemImage, itemRating;
+
+        if (type === 'movie') {
+          itemTitle = item.title;
+          itemDescription = item.overview.length > 120 ? item.overview.slice(0, 120) + '...' : item.overview;
+          itemImage = `https://image.tmdb.org/t/p/w500/${item.poster_path}`; // Movie image
+          itemRating = `Rating: ${item.vote_average}`;
+        } else if (type === 'book') {
+          itemTitle = item.title;
+          itemDescription = item.description.length > 120 ? item.description.slice(0, 120) + '...' : item.description;
+          itemImage = item.book_image || 'placeholder.jpg'; // Book image
+          itemRating = `Author: ${item.author}`;
+        }
+
+        itemDiv.innerHTML = `
+          <img src="${itemImage}" alt="${itemTitle}">
+          <div class="item-title">${itemTitle}</div>
+          <div class="item-description">${itemDescription}</div>
+          <div class="item-rating">${itemRating}</div>
         `;
 
-        moviesContainer.appendChild(movieDiv);
+        itemsContainer.appendChild(itemDiv);
       });
     }
 
-    fetchMovies();
+    // Function to display error messages
+    function displayError(message) {
+      const itemsContainer = document.getElementById('items');
+      itemsContainer.innerHTML = `<div class="error">${message}</div>`;
+    }
+
+    // Function to toggle between movies and books every 5 seconds
+    async function toggleContent() {
+      while (true) {
+        if (currentContent === 'movies') {
+          await fetchMovies();
+          currentContent = 'books';
+          await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+        } else {
+          await fetchTopSellersBooks();
+          currentContent = 'movies';
+          await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+        }
+      }
+    }
+
+    // Start fetching content on page load
+    toggleContent();
   </script>
 </body>
 </html>
